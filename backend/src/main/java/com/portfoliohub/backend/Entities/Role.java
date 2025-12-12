@@ -1,5 +1,6 @@
 package com.portfoliohub.backend.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.HashSet;
@@ -22,6 +23,7 @@ public class Role {
     private String name; // ROLE_USER, ROLE_ADMIN
 
     @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
 
 

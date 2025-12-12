@@ -28,12 +28,13 @@ public class AuthController {
         return ResponseEntity.ok(authService.register(request));
     }
 
-    //@PostMapping("/login")
-    //public ResponseEntity<AuthResponse> authenticate(
-            //@Valid @RequestBody LoginRequest request
-    //) {
-      //  return ResponseEntity.ok(authService.authenticate(request));
-    //}
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(
+            @Valid @RequestBody LoginRequest request
+    ) {
+        return ResponseEntity.ok(authService.login(request));
+    }
+
 
     @PostMapping("/refresh-token")
     public ResponseEntity<AuthResponse> refreshToken(@Valid @RequestBody RefreshRequest request) {
