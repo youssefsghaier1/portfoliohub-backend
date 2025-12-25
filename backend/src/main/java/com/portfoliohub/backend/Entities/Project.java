@@ -2,6 +2,8 @@ package com.portfoliohub.backend.Entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -27,17 +29,25 @@ public class Project {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    private String projectUrl;
-    private String repositoryUrl;
-    
+    private String githubUrl;      // 🔗 GitHub repo
+    private String liveDemoUrl;    // 🌍 Deployed app
+    private String imageUrl;       // 🖼️ Preview image
+
+    @Column(name = "is_featured")
+    private Boolean featured = false;
+
     @Column(name = "start_date")
-    private LocalDateTime startDate;
-    
+    private LocalDate startDate;
+
     @Column(name = "end_date")
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;

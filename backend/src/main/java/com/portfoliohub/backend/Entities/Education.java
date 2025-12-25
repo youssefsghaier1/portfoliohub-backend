@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "education")
+@Table(name = "educations")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,13 +28,7 @@ public class Education {
     @Column(nullable = false)
     private String degree;
 
-    @Column(name = "field_of_study")
     private String fieldOfStudy;
-
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    private String location;
 
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
@@ -42,13 +36,17 @@ public class Education {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @Column(name = "is_current")
-    private Boolean isCurrent = false;
+    private String location;
 
-    private Double grade;
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;

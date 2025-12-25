@@ -25,21 +25,29 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
 
-                        // 1️⃣ PUBLIC ENDPOINTS (no token needed)
+                        // 1️⃣ PUBLIC
                         .requestMatchers(
                                 "/api/v1/auth/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
-                                "/v3/api-docs/**"
+                                "/v3/api-docs/**",
+                                "/api/v1/profile/*",
+                                "/api/v1/profile/*/experiences"
                         ).permitAll()
 
-                        // 2️⃣ ROLE-BASED ENDPOINTS (future)
+                        // 2️⃣ ADMIN
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/v1/user/**").hasAnyRole("USER", "ADMIN")
 
-                        // 3️⃣ Everything else requires authentication
+                        // 3️⃣ USER (authenticated portfolio owner)
+                        .requestMatchers(
+                                "/api/v1/profile/me",
+                                "/api/v1/experience/**"
+                        ).hasAnyRole("USER", "ADMIN")
+
+                        // 4️⃣ Everything else
                         .anyRequest().authenticated()
                 )
+
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 

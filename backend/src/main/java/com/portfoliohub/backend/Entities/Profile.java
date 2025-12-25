@@ -43,6 +43,7 @@ public class Profile {
     private List<Project> projects = new ArrayList<>();
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("startDate DESC, createdAt DESC")
     private List<Experience> experiences = new ArrayList<>();
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)

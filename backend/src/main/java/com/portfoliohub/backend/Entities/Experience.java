@@ -4,9 +4,15 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import jakarta.persistence.Index;
 
 @Entity
-@Table(name = "experiences")
+@Table(
+        name = "experiences",
+        indexes = {
+                @Index(name = "idx_experience_profile", columnList = "profile_id")
+        }
+)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -45,9 +51,12 @@ public class Experience {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
