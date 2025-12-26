@@ -32,7 +32,8 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**",
                                 "/api/v1/profile/*",
-                                "/api/v1/profile/*/experiences"
+                                "/api/v1/profile/*/experiences",
+                                "/api/v1/portfolio/**"
                         ).permitAll()
 
                         // 2️⃣ ADMIN
