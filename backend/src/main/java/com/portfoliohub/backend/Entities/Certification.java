@@ -26,31 +26,16 @@ public class Certification {
     private String name;
 
     @Column(nullable = false)
-    private String issuingOrganization;
+    private String organization;
 
-    @Column(name = "credential_id")
-    private String credentialId;
-
-    @Column(name = "credential_url")
     private String credentialUrl;
 
-    @Column(name = "issue_date", nullable = false)
-    private LocalDate issueDate;
-
-    @Column(name = "expiry_date")
-    private LocalDate expiryDate;
+    private LocalDate issuedDate;
+    private LocalDate expirationDate;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
 }

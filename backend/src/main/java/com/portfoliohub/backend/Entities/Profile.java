@@ -73,4 +73,8 @@ public class Profile {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+    @Column(name = "is_public", nullable = false)
+    private Boolean isPublic = true;
+    @Column(name = "is_verified", nullable = false)
+    private Boolean verified = false;
 }

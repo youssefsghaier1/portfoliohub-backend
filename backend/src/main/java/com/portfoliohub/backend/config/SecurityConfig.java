@@ -33,7 +33,8 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/api/v1/profile/*",
                                 "/api/v1/profile/*/experiences",
-                                "/api/v1/portfolio/**"
+                                "/api/v1/portfolio/**",
+                                "/api/v1/messages/*"
                         ).permitAll()
 
                         // 2️⃣ ADMIN

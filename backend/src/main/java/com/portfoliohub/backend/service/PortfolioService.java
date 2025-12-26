@@ -24,7 +24,9 @@ public class PortfolioService {
 
         Profile profile = profileRepository.findByUser_Username(username)
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
-
+        if (!profile.getIsPublic()) {
+            throw new RuntimeException("Profile is private");
+        }
         return new PublicPortfolioResponseDto(
                 profile.getUser().getUsername(),
                 profile.getFullName(),
@@ -32,12 +34,10 @@ public class PortfolioService {
                 profile.getAvatarUrl(),
                 profile.getLocation(),
                 profile.getWebsite(),
-
                 mapExperiences(profile),
                 mapEducations(profile),
                 mapProjects(profile),
                 mapSkills(profile),
-
                 calculateCompletionScore(profile)
         );
     }
@@ -47,26 +47,24 @@ public class PortfolioService {
     // ======================
     private int calculateCompletionScore(Profile profile) {
         int score = 0;
-
         // Profile basics (20)
         if (profile.getFullName() != null && !profile.getFullName().isBlank()) score += 5;
         if (profile.getBio() != null && !profile.getBio().isBlank()) score += 5;
         if (profile.getAvatarUrl() != null && !profile.getAvatarUrl().isBlank()) score += 5;
         if (profile.getLocation() != null && !profile.getLocation().isBlank()) score += 5;
-
         // Experiences (25)
         if (!profile.getExperiences().isEmpty()) score += 25;
-
         // Projects (25)
         if (!profile.getProjects().isEmpty()) score += 25;
-
         // Skills (20)
         if (!profile.getSkills().isEmpty()) score += 20;
-
         // Education (10)
         if (!profile.getEducations().isEmpty()) score += 10;
-
+        if (score == 100) {
+            profile.setVerified(true);
+        }
         return Math.min(score, 100);
+        //based on score the prfiles will be verified in frontend also when scores are at max they will be shown first
     }
 
     // ======================

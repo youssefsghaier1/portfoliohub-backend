@@ -2,10 +2,11 @@ package com.portfoliohub.backend.Entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "messages")
+@Table(name = "message")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,10 +18,14 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id", nullable = false)
-    private User sender;
+    // 👤 Public sender (recruiter / visitor)
+    @Column(name = "sender_name", nullable = false)
+    private String senderName;
 
+    @Column(name = "sender_email", nullable = false)
+    private String senderEmail;
+
+    // 🎯 Receiver portfolio
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_profile_id", nullable = false)
     private Profile receiverProfile;
@@ -31,17 +36,14 @@ public class Message {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @Column(name = "is_read")
+    @Column(name = "is_read", nullable = false)
     private Boolean isRead = false;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
     }
 }
