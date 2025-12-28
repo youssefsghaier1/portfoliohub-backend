@@ -1,7 +1,7 @@
 package com.portfoliohub.backend.controller;
-
 import com.portfoliohub.backend.dto.profile.ProfileResponseDto;
 import com.portfoliohub.backend.dto.profile.ProfileUpdateRequestDto;
+import com.portfoliohub.backend.dto.profile.ProfileVisibilityRequestDto;
 import com.portfoliohub.backend.service.ProfileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +34,11 @@ public class ProfileController {
                 profileService.updateMyProfile(authentication, request)
         );
     }
+    // 🔐 ⭐ GET my completion score (ADD THIS)
+    @GetMapping("/me/completion-score")
+    public ResponseEntity<Integer> getMyCompletionScore(Authentication auth) {
+        return ResponseEntity.ok(profileService.getCompletionScore(auth));
+    }
 
     // 🌍 Public profile by username
     @GetMapping("/{username}")
@@ -42,4 +47,13 @@ public class ProfileController {
     ) {
         return ResponseEntity.ok(profileService.getPublicProfile(username));
     }
+    @PatchMapping("/me/visibility")
+    public ResponseEntity<Void> updateVisibility(
+            Authentication auth,
+            @RequestBody ProfileVisibilityRequestDto request
+    ) {
+        profileService.updateVisibility(auth, request.isPublic());
+        return ResponseEntity.noContent().build();
+    }
+
 }

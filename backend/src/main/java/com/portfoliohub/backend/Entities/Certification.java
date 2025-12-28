@@ -28,14 +28,26 @@ public class Certification {
     @Column(nullable = false)
     private String organization;
 
-    private String credentialUrl;
-
+    @Column(name = "issued_date", nullable = false)
     private LocalDate issuedDate;
+
     private LocalDate expirationDate;
+
+    private String credentialUrl;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+
+        if (this.issuedDate == null) {
+            this.issuedDate = LocalDate.now();
+        }
+    }
 }
+

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
+    private final ProfileCompletionService profileCompletionService; // ✅ ADD THIS
 
     // 🔐 GET my profile
     public ProfileResponseDto getMyProfile(Authentication authentication) {
@@ -47,7 +48,7 @@ public class ProfileService {
         return mapToDto(profile);
     }
 
-    //  PUBLIC profile
+    // 🌍 Public profile (basic info only)
     public ProfileResponseDto getPublicProfile(String username) {
         Profile profile = profileRepository.findByUser_Username(username)
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
@@ -55,7 +56,17 @@ public class ProfileService {
         return mapToDto(profile);
     }
 
-    // Mapper (manual = explicit & clean)
+    // ⭐ GET completion score
+    public int getCompletionScore(Authentication auth) {
+        Profile profile = profileRepository.findByUser_Email(auth.getName())
+                .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
+
+        return profileCompletionService.calculateScore(profile);
+    }
+
+    // ======================
+    // Mapper
+    // ======================
     private ProfileResponseDto mapToDto(Profile profile) {
         return new ProfileResponseDto(
                 profile.getId(),
@@ -67,5 +78,12 @@ public class ProfileService {
                 profile.getWebsite(),
                 profile.getBirthdate()
         );
+    }
+    @Transactional
+    public void updateVisibility(Authentication auth, boolean isPublic) {
+        Profile profile = profileRepository.findByUser_Email(auth.getName())
+                .orElseThrow(() -> new RuntimeException("Profile not found"));
+
+        profile.setPublicProfile(isPublic);
     }
 }

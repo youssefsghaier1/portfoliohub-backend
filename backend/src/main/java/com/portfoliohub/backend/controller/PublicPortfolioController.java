@@ -1,5 +1,4 @@
 package com.portfoliohub.backend.controller;
-
 import com.portfoliohub.backend.dto.portfolio.PublicPortfolioResponseDto;
 import com.portfoliohub.backend.service.PortfolioService;
 import lombok.RequiredArgsConstructor;
@@ -22,4 +21,5 @@ public class PublicPortfolioController {
                 portfolioService.getPublicPortfolio(username)
         );
     }
+
 }
